@@ -14,7 +14,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
 
-            <MudPaper Class="align-content-start flex-wrap" Elevation="0">
+
 
                 <MudTextField Class="d-flex py-2" @bind-Value="UserSignUp.Email" Variant="Variant.Filled" Label="Email" />
                 <ValidationMessage For="@(() => UserSignUp.Email)" />
@@ -25,7 +25,7 @@
                 <MudTextField Class="d-flex py-2" @bind-Value="passwordCheck" Label="Repeat Password" Variant="Variant.Filled" InputType="@PasswordInput"  OnAdornmentClick="ButtonTestclick"  />
                 <ValidationMessage For="@(() => passwordCheck)" />
 
-                <MudPaper Class="d-flex flex-grow-1 gap-1 py-2" Elevation="0">
+                <MudPaper Class="d-flex flex-grow-1 gap-1" Elevation="0">
                     <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToLogin" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Cancel</MudText></MudButton>
                     <MudButton Class="py-3 d-inline-flex flex-1" Disabled="@_processing" OnClick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
                         @if (_processing)
@@ -40,7 +40,7 @@
 
                     </MudButton>
                   
-                </MudPaper>
+
             </MudPaper>
         </EditForm>
     </div>
