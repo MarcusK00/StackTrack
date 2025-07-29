@@ -5,55 +5,57 @@
 
 <PageTitle>Sign Up</PageTitle>
 
-<div class="login-container">
-    <h3>Sign Up to StackTrack</h3>
+<div class="login-wrapper">
+    <MudImage Class="logo-image" ObjectFit="ObjectFit.Contain" Width="400" Height="400" Src="images/logo.png" Alt="logo" Elevation="0" />
+    <div class="login-container">
 
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <div class="alert alert-danger">
-            @errorMessage
-        </div>
-    }
-    else if(!string.IsNullOrEmpty(sentEmail))
-    {
-    <div class="email-confirmation">
-        @sentEmail
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">
+                @errorMessage
+            </div>
+        }
+
+        <EditForm Model="@UserSignUp">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudPaper Class="align-content-start flex-wrap" Elevation="0">
+
+                <MudTextField Class="d-flex py-2" @bind-Value="UserSignUp.Email" Variant="Variant.Filled" Label="Email" />
+                <ValidationMessage For="@(() => UserSignUp.Email)" />
+
+                <MudTextField Class="d-flex py-2" @bind-Value="UserSignUp.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+                <ValidationMessage For="@(() => UserSignUp.Password)" />
+
+                <MudTextField Class="d-flex py-2" @bind-Value="passwordCheck" Label="Repeat Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+                <ValidationMessage For="@(() => passwordCheck)" />
+
+                <MudPaper Class="d-flex flex-grow-1 gap-1 py-2" Elevation="0">
+                    <MudButton Class="py-3 d-inline-flex flex-1" Disabled="@_processing" OnClick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Create</MudText>
+                        }
+
+                    </MudButton>
+                    <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToLogin" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Cancel</MudText></MudButton>
+                </MudPaper>
+            </MudPaper>
+        </EditForm>
     </div>
-    }
-
-    <EditForm Model="@UserSignUp" OnValidSubmit="HandleSignUp">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="form-group">
-            <label>Email</label>
-            <InputText class="form-control" @bind-Value="UserSignUp.Email" />
-            <ValidationMessage For="@(() => UserSignUp.Email)" />
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <InputText class="form-control" @bind-Value="UserSignUp.Password" type="password" />
-            <ValidationMessage For="@(() => UserSignUp.Password)" />
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary" disabled="@isLoading">
-                @if (isLoading)
-                {
-                    <span>Creating User...</span>
-                }
-                else
-                {
-                    <span>Sign Up</span>
-                }
-            </button>
-            <button type="button" class="btn btn-secondary" onclick="@RedirectToLogin">Back</button>
-        </div>
-    </EditForm>
 </div>
 
 @code
 {
+    [Inject] private IDialogService DialogService { get; set; }
+    private string passwordCheck;
     private User UserSignUp = new User();
     private string errorMessage = string.Empty;
     private string sentEmail = string.Empty;
@@ -65,35 +67,103 @@
     }
     private async Task HandleSignUp()
     {
-        isLoading = true;
-        errorMessage = string.Empty;
+        bool result = IfPasswordMatch();
+        if (result)
+        {
+            ProcessSomething();
+            isLoading = true;
+            errorMessage = string.Empty;
 
-        try
-        {
-            var session = await SupabaseClient.Auth.SignUp(UserSignUp.Email, UserSignUp.Password);
-            if (session.User != null)
+            try
             {
-                sentEmail = $"User created successfully: {session.User.Email}";
-                Console.WriteLine($"User created successfully {session.User.Email}");
-                UserSignUp.Email = string.Empty;
-                UserSignUp.Password = string.Empty;
-                return;
+                var session = await SupabaseClient.Auth.SignUp(UserSignUp.Email, UserSignUp.Password);
+                if (session.User != null)
+                {
+                    sentEmail = $"User created successfully: {session.User.Email}";
+                    Console.WriteLine($"User created successfully {session.User.Email}");
+                    ClearTextFields();
+                    await Task.Delay(3000);
+                    Navigation.NavigateTo("/login");
+                }
+                else
+                {
+                    errorMessage = "Error, try again.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                errorMessage = "Error, try again.";
+                errorMessage = $"Creation failed: {ex.Message}";
+                Console.Error.WriteLine($"Create error: {ex}");
+            }
+            finally
+            {
+                isLoading = false;
             }
         }
-        catch (Exception ex)
+        else
         {
-            errorMessage = $"Creation failed: {ex.Message}";
-            Console.Error.WriteLine($"Create error: {ex}");
+            MessageBox();
         }
-        finally
+    }
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ButtonTestclick()
+    {
+        @if (isShow)
         {
-            isLoading = false;
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
         }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private bool _processing = false;
+
+    async Task ProcessSomething()
+    {
+        _processing = true;
+        await Task.Delay(2000);
+        _processing = false;
+    }
+
+    private bool IfPasswordMatch()
+    {
+        if (passwordCheck == UserSignUp.Password)
+            return true;
+        else return false;
+    }
+
+    private async void MessageBox()
+    {
+        ClearTextFields();
+
+        bool? result = await DialogService.ShowMessageBox(
+            "Error",
+            "Passwords doesn't match");
+
+    }
+
+    private void ClearTextFields()
+    {
+        UserSignUp.Email = string.Empty;
+        passwordCheck = string.Empty;
+        UserSignUp.Password = string.Empty;
     }
 
 
 }
+
+
+
+
+
+
