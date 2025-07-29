@@ -1,17 +1,35 @@
 ﻿@inherits LayoutComponentBase
-
+<MudThemeProvider Theme="_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
+   
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    bool _drawerOpen = true;
+
+    private readonly MudTheme _currentTheme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#dd5c40",
+            Secondary = "#323940",
+            Info = "#323940",
+            Success = "#323940",
+            Warning = "#323940",
+            Error = "#FF0000",
+            AppbarBackground = "#323940",
+            TextPrimary = "#323940",
+            TextSecondary = "#323940",
+            // more color properties
+        }
+    };
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+}
