@@ -73,7 +73,7 @@
             var session = await SupabaseClient.Auth.SignUp(UserSignUp.Email, UserSignUp.Password);
             if (session.User != null)
             {
-                sentEmail = $"Email confirmation link has been sent to {session.User.Email}";
+                sentEmail = $"User created successfully: {session.User.Email}";
                 Console.WriteLine($"User created successfully {session.User.Email}");
                 UserSignUp.Email = string.Empty;
                 UserSignUp.Password = string.Empty;
@@ -94,4 +94,6 @@
             isLoading = false;
         }
     }
+
+
 }
