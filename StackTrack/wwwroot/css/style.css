@@ -6,49 +6,18 @@
     min-height: 100vh;
     background-color: #ffffff;
     position: relative;
-    margin-top: -70px;
-}
 
-.logo-image {
-    margin-bottom: -30px; /* spacing between logo and form */
-    margin-top:-50px;
 }
 
 .login-container {
     max-width: 400px;
     width: 100%;
+    margin-top: 180px;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-}
-
-.btn {
-    padding: 8px 16px;
-    margin-top: 10px;
-}
-
-.alert {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-}
-
-.email-confirmation {
-    border-color: #000000;
-    color: #00ff21;
+.logo-image {
+    margin-top: -350px;
+    position: absolute;
 }
 
 .logo {

@@ -1,0 +1,126 @@
+﻿<MudAppBar Elevation="4" Color="Color.Secondary" Fixed="true" Dense="true" Class="app-bar-custom">
+    <div class="d-flex align-center" style="width: 100%">
+        <!-- Mobile Menu Button -->
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                           Color="Color.Inherit"
+                           Edge="Edge.Start"
+                           OnClick="@ToggleDrawer"
+                           Class="mr-3" />
+        </MudHidden>
+
+        <!-- Logo Section -->
+        <div class="d-flex align-center brand-section">
+            <MudText Typo="Typo.h5" Color="Color.Inherit" Class="ml-1 font-weight-bold">
+                Stack<span style="color: var(--mud-palette-primary); font-weight: 700;">Track</span>
+            </MudText>
+        </div>
+
+        <MudSpacer />
+
+        <!-- Desktop Actions -->
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudTooltip Text="Start New Workout">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.AddCircle"
+                           OnClick="@StartNewWorkout"
+                           Size="Size.Small"
+                           Class="ml-2">
+                    New Workout
+                </MudButton>
+            </MudTooltip>
+
+            <MudMenu Icon="@Icons.Material.Filled.Insights"
+                     Color="Color.Inherit"
+                     Class="ml-3"
+                     AnchorOrigin="Origin.BottomCenter"
+                     TransformOrigin="Origin.TopCenter">
+                <MudText Typo="Typo.subtitle2" Class="px-2 py-1">Analytics</MudText>
+                <MudDivider />
+                <MudMenuItem OnClick="@(() => Navigation.NavigateTo("/analytics"))">Progress Charts</MudMenuItem>
+                <MudMenuItem OnClick="@(() => Navigation.NavigateTo("/stats"))">Stats Overview</MudMenuItem>
+            </MudMenu>
+        </MudHidden>
+
+        <!-- User Section -->
+        <div class="d-flex align-center ml-4">
+
+
+            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                <MudText Typo="Typo.body1" Class="ml-2">
+                    MarcusK00
+                </MudText>
+            </MudHidden>
+
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                     Color="Color.Inherit"
+                     Edge="Edge.End"
+                     AnchorOrigin="Origin.BottomRight"
+                     TransformOrigin="Origin.TopRight">
+                <MudMenuItem Icon="@Icons.Material.Filled.Person" OnClick="@(() => Navigation.NavigateTo("/profile"))">
+                    Profile
+                </MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.Settings" OnClick="@(() => Navigation.NavigateTo("/settings"))">
+                    Settings
+                </MudMenuItem>
+                <MudDivider />
+                <MudMenuItem Icon="@Icons.Material.Filled.Logout" OnClick="@Logout">
+                    Logout
+                </MudMenuItem>
+            </MudMenu>
+        </div>
+    </div>
+</MudAppBar>
+
+<MudDrawer @bind-Open="_drawerOpen" Elevation="2" Variant="@DrawerVariant.Temporary" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">StackTrack</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu Bordered="true" Class="mud-width-full">
+        <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+        <MudNavLink Href="/workout/new" Icon="@Icons.Material.Filled.FitnessCenter">Start Workout</MudNavLink>
+        <MudNavLink Href="/history" Icon="@Icons.Material.Filled.History">Workout History</MudNavLink>
+        <MudNavLink Href="/exercises" Icon="@Icons.Material.Filled.List">My Exercises</MudNavLink>
+        <MudNavLink Href="/analytics" Icon="@Icons.Material.Filled.BarChart">Analytics</MudNavLink>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+        <MudNavLink OnClick="Logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+<style>
+    .app-bar-custom {
+        background: linear-gradient(to right, var(--mud-palette-secondary-darken), var(--mud-palette-secondary));
+        border-bottom: 2px solid var(--mud-palette-primary-lighten);
+    }
+
+    .brand-section {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .app-logo {
+        filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+    }
+</style>
+
+@code {
+    private bool _drawerOpen = false;
+
+    [Inject] NavigationManager Navigation { get; set; }
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void StartNewWorkout()
+    {
+        Navigation.NavigateTo("/workout/new");
+    }
+
+    private void Logout()
+    {
+        // your logout logic
+    }
+}

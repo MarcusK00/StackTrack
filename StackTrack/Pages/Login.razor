@@ -9,13 +9,6 @@
     <div class="login-container">
        
 
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <div class="alert alert-danger">
-            @errorMessage
-        </div>
-    }
-
     <EditForm Model="@UserLogin">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -25,10 +18,11 @@
             <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Email" Variant="Variant.Filled" Label="Email" />
             <ValidationMessage For="@(() => UserLogin.Email)" />
 
-                <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+            <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
             <ValidationMessage For="@(() => UserLogin.Password)" />
  
         <MudPaper Class="d-flex flex-grow-1 gap-1 py-2" Elevation="0">
+                    <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToSignUp" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Sign Up</MudText></MudButton>
             <MudButton Class="py-3 d-inline-flex flex-1"  Disabled="@_processing" OnClick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
                 @if (_processing)
                 {
@@ -40,7 +34,7 @@
                     <MudText>Login</MudText>
                 }
             </MudButton>
-            <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToSignUp" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Sign Up</MudText></MudButton>
+
         </MudPaper>
         </MudPaper>
     </EditForm>
@@ -50,8 +44,6 @@
 @code
 {
     private User UserLogin = new User();
-    private string errorMessage = string.Empty;
-    private bool isLoading = false;
 
     private void RedirectToSignUp()
     {
@@ -66,9 +58,8 @@
     }
     private async Task HandleLogin()
     {
-        ProcessSomething();
-        isLoading = true;
-        errorMessage = string.Empty;
+        await ProcessSomething();
+
 
         try
         {
@@ -78,19 +69,12 @@
                 Console.WriteLine($"Login successful for user: {session.User.Email}");
                 Navigation.NavigateTo("/home");
             }
-            else
-            {
-                errorMessage = "Authentication failed. Please check your credentials.";
-            }
+
         }
         catch (Exception ex)
         {
-            errorMessage = $"Login failed: {ex.Message}";
+
             Console.Error.WriteLine($"Login error: {ex}");
-        }
-        finally
-        {
-            isLoading = false;
         }
     }
 

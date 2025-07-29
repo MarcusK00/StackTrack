@@ -1,5 +1,5 @@
 ﻿@page "/home"
-
+@layout NavLayout
 @using MudBlazor
 @using System.Globalization
 @inject Supabase.Client SupabaseClient
@@ -9,65 +9,22 @@
 <PageTitle>Dashboard - StackTrack</PageTitle>
 
 <MudLayout>
-    <MudAppBar Elevation="3" Color="Color.Primary" Dense="true" Fixed="false">
-        <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
-        </MudHidden>
-        <MudText Typo="Typo.h6" Class="ml-2">
-            <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Class="mr-2" />
-            StackTrack
-        </MudText>
-        <MudSpacer />
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudTooltip Text="Start New Workout">
-                <MudIconButton Icon="@Icons.Material.Filled.AddCircle" Color="Color.Inherit" OnClick="@StartNewWorkout" />
-            </MudTooltip>
-            <MudTooltip Text="View Profile">
-                <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
-            </MudTooltip>
-        </MudHidden>
-        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End">
-            <MudMenuItem OnClick="@(() => Navigation.NavigateTo("/settings"))">Settings</MudMenuItem>
-            <MudMenuItem OnClick="@Logout">Logout</MudMenuItem>
-        </MudMenu>
-    </MudAppBar>
-
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Variant="@DrawerVariant.Temporary" ClipMode="DrawerClipMode.Always">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">StackTrack</MudText>
-        </MudDrawerHeader>
-        <MudNavMenu Color="Color.Primary" Bordered="true" Class="mud-width-full">
-            <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-            <MudNavLink Href="/workout/new" Icon="@Icons.Material.Filled.FitnessCenter">Start Workout</MudNavLink>
-            <MudNavLink Href="/history" Icon="@Icons.Material.Filled.History">Workout History</MudNavLink>
-            <MudNavLink Href="/exercises" Icon="@Icons.Material.Filled.List">My Exercises</MudNavLink>
-            <MudNavLink Href="/analytics" Icon="@Icons.Material.Filled.BarChart">Analytics</MudNavLink>
-            <MudDivider Class="my-2" />
-            <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
-            <MudNavLink OnClick="Logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
-        </MudNavMenu>
-    </MudDrawer>
-
-    <MudMainContent Class="pt-2 px-2">
+    <MudMainContent Class="d-flex align-stretch flex-grow-1 gap-4">
         <MudContainer MaxWidth="MaxWidth.Large">
             <!-- Welcome Section with Workout Recommendation -->
-            <MudPaper Elevation="0" Class="pa-4 mb-4 rounded-lg" Style="background: linear-gradient(135deg, var(--mud-palette-primary-lighten), var(--mud-palette-primary));">
+            <MudPaper Elevation="3" Class="pa-4 mb-4 rounded-lg" Style="background: linear-gradient(135deg, #f5f5f5, #e0e0e0); border-left: 4px solid var(--mud-palette-primary);">
                 <MudGrid>
                     <MudItem xs="12" sm="8">
-                        <MudText Typo="Typo.h5" Color="Color.Surface">Welcome back, @userName!</MudText>
-                        <MudText Typo="Typo.body1" Color="Color.Surface" Class="mb-2">
-                            @GetMotivationalMessage()
-                        </MudText>
                         @if (isWorkoutDue)
                         {
-                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PlayArrow" 
-                                     OnClick="StartNewWorkout" Size="Size.Large" Class="mt-2">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PlayArrow"
+                                       OnClick="StartNewWorkout" Size="Size.Large" Class="mt-2">
                                 Start Today's Workout
                             </MudButton>
                         }
                     </MudItem>
                     <MudItem xs="12" sm="4" Class="d-flex justify-end align-center">
-                        <MudChip Color="Color.Surface" Size="Size.Large" Icon="@Icons.Material.Filled.Today" T="string">
+                        <MudChip Color="Color.Primary" Size="Size.Large" Icon="@Icons.Material.Filled.Today" T="string">
                             @DateTime.Now.ToString("MMM d, yyyy")
                         </MudChip>
                     </MudItem>
@@ -77,39 +34,39 @@
             <MudGrid Spacing="2">
                 <!-- Quick Stats Cards -->
                 <MudItem xs="6" sm="3">
-                    <MudPaper Elevation="2" Class="pa-4 mud-theme-primary" Style="height:100%">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: white; border-radius: 8px; border-top: 3px solid var(--mud-palette-secondary);">
                         <MudGrid>
                             <MudItem xs="8">
-                                <MudText Typo="Typo.h5">@totalWorkouts</MudText>
-                                <MudText Typo="Typo.caption">Total Workouts</MudText>
+                                <MudText Typo="Typo.h5" Color="Color.Dark">@totalWorkouts</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Dark">Total Workouts</MudText>
                             </MudItem>
                             <MudItem xs="4" Class="d-flex justify-center align-center">
-                                <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Large" />
+                                <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Large" Color="Color.Secondary" />
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
                 </MudItem>
-                
+
                 <MudItem xs="6" sm="3">
-                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: var(--mud-palette-success-lighten);">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: white; border-radius: 8px; border-top: 3px solid var(--mud-palette-primary);">
                         <MudGrid>
                             <MudItem xs="8">
-                                <MudText Typo="Typo.h5">@currentStreak</MudText>
-                                <MudText Typo="Typo.caption">Day Streak</MudText>
+                                <MudText Typo="Typo.h5" Color="Color.Dark">@currentStreak</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Dark">Day Streak</MudText>
                             </MudItem>
                             <MudItem xs="4" Class="d-flex justify-center align-center">
-                                <MudIcon Icon="@Icons.Material.Filled.LocalFireDepartment" Size="Size.Large" Color="Color.Error" />
+                                <MudIcon Icon="@Icons.Material.Filled.LocalFireDepartment" Size="Size.Large" Color="Color.Primary" />
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
                 </MudItem>
-                
+
                 <MudItem xs="6" sm="3">
-                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: var(--mud-palette-info-lighten);">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: white; border-radius: 8px; border-top: 3px solid var(--mud-palette-warning);">
                         <MudGrid>
                             <MudItem xs="8">
-                                <MudText Typo="Typo.h5">@personalRecords</MudText>
-                                <MudText Typo="Typo.caption">Personal Records</MudText>
+                                <MudText Typo="Typo.h5" Color="Color.Dark">@personalRecords</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Dark">Personal Records</MudText>
                             </MudItem>
                             <MudItem xs="4" Class="d-flex justify-center align-center">
                                 <MudIcon Icon="@Icons.Material.Filled.EmojiEvents" Size="Size.Large" Color="Color.Warning" />
@@ -117,16 +74,16 @@
                         </MudGrid>
                     </MudPaper>
                 </MudItem>
-                
+
                 <MudItem xs="6" sm="3">
-                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: var(--mud-palette-secondary-lighten);">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height:100%; background-color: white; border-radius: 8px; border-top: 3px solid var(--mud-palette-info);">
                         <MudGrid>
                             <MudItem xs="8">
-                                <MudText Typo="Typo.h5">@totalExercises</MudText>
-                                <MudText Typo="Typo.caption">Exercises</MudText>
+                                <MudText Typo="Typo.h5" Color="Color.Dark">@totalExercises</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Dark">Exercises</MudText>
                             </MudItem>
                             <MudItem xs="4" Class="d-flex justify-center align-center">
-                                <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Large" />
+                                <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Large" Color="Color.Info" />
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
@@ -134,13 +91,13 @@
 
                 <!-- Progress Chart -->
                 <MudItem xs="12" md="8">
-                    <MudCard Elevation="2">
-                        <MudCardHeader>
+                    <MudCard Elevation="2" Style="border-radius: 8px;">
+                        <MudCardHeader Class="pb-0">
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h6">Progress Tracking</MudText>
                             </CardHeaderContent>
                             <CardHeaderActions>
-                                <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                                <MudMenu Icon="@Icons.Material.Filled.MoreVert" Color="Color.Dark">
                                     <MudMenuItem>Last 30 days</MudMenuItem>
                                     <MudMenuItem>Last 3 months</MudMenuItem>
                                     <MudMenuItem>Last year</MudMenuItem>
@@ -148,22 +105,22 @@
                             </CardHeaderActions>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudTabs Elevation="0" Rounded="true" ApplyEffectsToContainer="true" PanelClass="py-6">
+                            <MudTabs Elevation="0" Rounded="true" ApplyEffectsToContainer="true" PanelClass="py-6" Color="Color.Primary">
                                 <MudTabPanel Text="Weight">
-                                    <MudChart ChartType="ChartType.Line" 
-                                             ChartSeries="@weightSeries"
-                                             XAxisLabels="@progressDates" 
-                                             Width="100%" Height="300px">
+                                    <MudChart ChartType="ChartType.Line"
+                                              ChartSeries="@weightSeries"
+                                              XAxisLabels="@progressDates"
+                                              Width="100%" Height="300px">
                                         <CustomGraphics>
                                             <MudText Typo="Typo.body2" Align="Align.Center">Weight Progress (lbs)</MudText>
                                         </CustomGraphics>
                                     </MudChart>
                                 </MudTabPanel>
                                 <MudTabPanel Text="Volume">
-                                    <MudChart ChartType="ChartType.Bar" 
-                                             ChartSeries="@volumeSeries" 
-                                             XAxisLabels="@progressDates"
-                                             Width="100%" Height="300px">
+                                    <MudChart ChartType="ChartType.Bar"
+                                              ChartSeries="@volumeSeries"
+                                              XAxisLabels="@progressDates"
+                                              Width="100%" Height="300px">
                                         <CustomGraphics>
                                             <MudText Typo="Typo.body2" Align="Align.Center">Weekly Volume (sets × reps × weight)</MudText>
                                         </CustomGraphics>
@@ -177,8 +134,8 @@
                 <!-- Sidebar Content -->
                 <MudItem xs="12" md="4">
                     <!-- Next Workout Card -->
-                    <MudCard Elevation="2" Class="mb-4">
-                        <MudCardHeader>
+                    <MudCard Elevation="2" Class="mb-4" Style="border-radius: 8px;">
+                        <MudCardHeader Class="pb-1">
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h6">Next Scheduled Workout</MudText>
                             </CardHeaderContent>
@@ -189,12 +146,12 @@
                                 <MudAlert Severity="Severity.Info" Dense="true" Class="mb-3">Today is your workout day!</MudAlert>
                             }
                             <MudTimeline TimelinePosition="TimelinePosition.Start" TimelineAlign="TimelineAlign.Start">
-                                <MudTimelineItem Color="Color.Primary" Size="Size.Small" Icon="@Icons.Material.Filled.CalendarToday">
-                                    <MudText Typo="Typo.body1" Color="Color.Default">@nextWorkoutDate.ToString("dddd, MMM d")</MudText>
-                                    <MudText Typo="Typo.caption">Scheduled Workout: @nextWorkoutPlan</MudText>
+                                <MudTimelineItem Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.CalendarToday">
+                                    <MudText Typo="Typo.body1" Color="Color.Dark">@nextWorkoutDate.ToString("dddd, MMM d")</MudText>
+                                    <MudText Typo="Typo.caption" Color="Color.Dark">Scheduled Workout: @nextWorkoutPlan</MudText>
                                 </MudTimelineItem>
-                                <MudTimelineItem Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.FitnessCenter">
-                                    <MudText Typo="Typo.body2">Main focus: @nextWorkoutFocus</MudText>
+                                <MudTimelineItem Color="Color.Primary" Size="Size.Small" Icon="@Icons.Material.Filled.FitnessCenter">
+                                    <MudText Typo="Typo.body2" Color="Color.Dark">Main focus: @nextWorkoutFocus</MudText>
                                     <MudChipSet T="string" Class="mt-2">
                                         @foreach (var exercise in nextWorkoutExercises)
                                         {
@@ -211,8 +168,8 @@
                     </MudCard>
 
                     <!-- Recent PRs -->
-                    <MudCard Elevation="2" Class="mb-4">
-                        <MudCardHeader>
+                    <MudCard Elevation="2" Class="mb-4" Style="border-radius: 8px;">
+                        <MudCardHeader Class="pb-1">
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h6">Recent PRs</MudText>
                             </CardHeaderContent>
@@ -224,8 +181,8 @@
                                     <MudListItem Icon="@Icons.Material.Filled.EmojiEvents" IconColor="Color.Warning">
                                         <div class="d-flex justify-space-between align-center">
                                             <div>
-                                                <MudText Typo="Typo.body2">@pr.Exercise</MudText>
-                                                <MudText Typo="Typo.caption">@pr.Date.ToString("MMM d")</MudText>
+                                                <MudText Typo="Typo.body2" Color="Color.Dark">@pr.Exercise</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Dark">@pr.Date.ToString("MMM d")</MudText>
                                             </div>
                                             <MudText Typo="Typo.body1" Color="Color.Success" Class="font-weight-bold">@pr.Weight lbs</MudText>
                                         </div>
@@ -236,8 +193,8 @@
                     </MudCard>
 
                     <!-- Quick Actions Card -->
-                    <MudCard Elevation="2">
-                        <MudCardHeader>
+                    <MudCard Elevation="2" Style="border-radius: 8px;">
+                        <MudCardHeader Class="pb-1">
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h6">Quick Actions</MudText>
                             </CardHeaderContent>
@@ -245,30 +202,30 @@
                         <MudCardContent>
                             <MudGrid Spacing="1">
                                 <MudItem xs="6">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" 
-                                             OnClick="StartNewWorkout" FullWidth="true" 
-                                             StartIcon="@Icons.Material.Filled.AddCircle">
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                                               OnClick="StartNewWorkout" FullWidth="true"
+                                               StartIcon="@Icons.Material.Filled.AddCircle">
                                         New Workout
                                     </MudButton>
                                 </MudItem>
                                 <MudItem xs="6">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" 
-                                             OnClick="ViewHistory" FullWidth="true"
-                                             StartIcon="@Icons.Material.Filled.History">
+                                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                                               OnClick="ViewHistory" FullWidth="true"
+                                               StartIcon="@Icons.Material.Filled.History">
                                         History
                                     </MudButton>
                                 </MudItem>
                                 <MudItem xs="6">
-                                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" 
-                                             OnClick="ManageExercises" FullWidth="true"
-                                             StartIcon="@Icons.Material.Filled.List">
+                                    <MudButton Variant="Variant.Outlined" Color="Color.Dark"
+                                               OnClick="ManageExercises" FullWidth="true"
+                                               StartIcon="@Icons.Material.Filled.List">
                                         Exercises
                                     </MudButton>
                                 </MudItem>
                                 <MudItem xs="6">
-                                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" 
-                                             OnClick="@(() => Navigation.NavigateTo("/analytics"))" FullWidth="true"
-                                             StartIcon="@Icons.Material.Filled.BarChart">
+                                    <MudButton Variant="Variant.Outlined" Color="Color.Dark"
+                                               OnClick="@(() => Navigation.NavigateTo("/analytics"))" FullWidth="true"
+                                               StartIcon="@Icons.Material.Filled.BarChart">
                                         Analytics
                                     </MudButton>
                                 </MudItem>
@@ -279,8 +236,8 @@
 
                 <!-- Last Workout Summary -->
                 <MudItem xs="12">
-                    <MudCard Elevation="2">
-                        <MudCardHeader>
+                    <MudCard Elevation="2" Style="border-radius: 8px;">
+                        <MudCardHeader Class="pb-1">
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h6">Last Workout</MudText>
                             </CardHeaderContent>
@@ -293,7 +250,7 @@
                         <MudCardContent>
                             @if (lastWorkoutExists)
                             {
-                                <MudText Typo="Typo.subtitle2" GutterBottom="true">
+                                <MudText Typo="Typo.subtitle2" Color="Color.Dark" GutterBottom="true">
                                     @lastWorkoutName - @lastWorkoutDate.ToString("MMM d, yyyy")
                                 </MudText>
                                 <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="max-height: 300px">
@@ -331,17 +288,18 @@
 
     <!-- Add floating action button for mobile -->
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
-        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" 
-               Style="position: fixed; right: 16px; bottom: 16px; z-index: 10"
-               OnClick="StartNewWorkout" />
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                Style="position: fixed; right: 16px; bottom: 16px; z-index: 10"
+                OnClick="StartNewWorkout" />
     </MudHidden>
 </MudLayout>
 
 @code {
     private bool _drawerOpen = false;
-    private string userName = "Athlete";
+    private string userName = "MarcusK00";
     private bool isWorkoutDue = true;
-    
+    private bool _isLargeScreen = true;
+
     // Summary fields
     private int totalWorkouts = 28;
     private int currentStreak = 7;
@@ -361,7 +319,7 @@
     private bool lastWorkoutExists = true;
     private DateTime lastWorkoutDate = DateTime.Now.AddDays(-2);
     private string lastWorkoutName = "Push Day";
-    
+
     private class ExerciseData
     {
         public string Name { get; set; }
@@ -369,27 +327,27 @@
         public int Reps { get; set; }
         public int Weight { get; set; }
     }
-    
+
     private class PersonalRecord
     {
         public string Exercise { get; set; }
         public int Weight { get; set; }
         public DateTime Date { get; set; }
     }
-    
+
     private List<ExerciseData> lastWorkoutExercises = new();
     private List<PersonalRecord> recentPRs = new();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadUserData();
-        
+
         // Initialize chart data
         weightSeries.Add(new ChartSeries() { Name = "Bench Press", Data = new double[] { 135, 145, 145, 155, 160 } });
         weightSeries.Add(new ChartSeries() { Name = "Squat", Data = new double[] { 185, 195, 205, 215, 225 } });
-        
+
         volumeSeries.Add(new ChartSeries() { Name = "Weekly Volume", Data = new double[] { 15000, 16200, 17500, 16800, 18500 } });
-        
+
         // Sample last workout data
         lastWorkoutExercises = new List<ExerciseData>
         {
@@ -399,7 +357,7 @@
             new ExerciseData { Name = "Tricep Pushdown", Sets = 3, Reps = 15, Weight = 50 },
             new ExerciseData { Name = "Lateral Raise", Sets = 3, Reps = 12, Weight = 20 }
         };
-        
+
         // Sample PR data
         recentPRs = new List<PersonalRecord>
         {
@@ -419,7 +377,7 @@
             // 2. Workout history
             // 3. PR data
             // 4. Progress metrics
-            
+
             // For now using dummy data
             // In a real implementation, you'd query Supabase like:
             // var response = await SupabaseClient.From<Workout>().Select("*").Order("created_at", Postgrest.Constants.Ordering.Descending).Limit(10).Get();
@@ -431,19 +389,7 @@
         }
     }
 
-    private string GetMotivationalMessage()
-    {
-        string[] messages = {
-            "Keep pushing your limits today!",
-            "You're making great progress. Let's keep the momentum going!",
-            "One more rep, one step closer to your goal.",
-            $"You're on a {currentStreak}-day streak. Amazing consistency!",
-            "Today is a great day to set a new personal record."
-        };
-        
-        Random random = new Random();
-        return messages[random.Next(messages.Length)];
-    }
+
 
     private void ToggleDrawer()
     {

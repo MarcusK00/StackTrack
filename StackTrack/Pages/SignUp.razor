@@ -10,13 +10,6 @@
     <div class="login-container">
 
 
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="alert alert-danger">
-                @errorMessage
-            </div>
-        }
-
         <EditForm Model="@UserSignUp">
             <DataAnnotationsValidator />
             <ValidationSummary />
@@ -29,10 +22,11 @@
                 <MudTextField Class="d-flex py-2" @bind-Value="UserSignUp.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
                 <ValidationMessage For="@(() => UserSignUp.Password)" />
 
-                <MudTextField Class="d-flex py-2" @bind-Value="passwordCheck" Label="Repeat Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+                <MudTextField Class="d-flex py-2" @bind-Value="passwordCheck" Label="Repeat Password" Variant="Variant.Filled" InputType="@PasswordInput"  OnAdornmentClick="ButtonTestclick"  />
                 <ValidationMessage For="@(() => passwordCheck)" />
 
                 <MudPaper Class="d-flex flex-grow-1 gap-1 py-2" Elevation="0">
+                    <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToLogin" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Cancel</MudText></MudButton>
                     <MudButton Class="py-3 d-inline-flex flex-1" Disabled="@_processing" OnClick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
                         @if (_processing)
                         {
@@ -45,7 +39,7 @@
                         }
 
                     </MudButton>
-                    <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToLogin" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Cancel</MudText></MudButton>
+                  
                 </MudPaper>
             </MudPaper>
         </EditForm>
@@ -54,50 +48,39 @@
 
 @code
 {
-    [Inject] private IDialogService DialogService { get; set; }
-    private string passwordCheck;
+    [Inject] private IDialogService? DialogService { get; set; }
+    private string? passwordCheck;
     private User UserSignUp = new User();
-    private string errorMessage = string.Empty;
-    private string sentEmail = string.Empty;
-    private bool isLoading = false;
+    private bool _processing = false;
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     private void RedirectToLogin()
     {
         Navigation.NavigateTo("/login");
     }
+
     private async Task HandleSignUp()
     {
-        bool result = IfPasswordMatch();
-        if (result)
+        if (IfPasswordMatch())
         {
-            ProcessSomething();
-            isLoading = true;
-            errorMessage = string.Empty;
-
+            await ProcessSomething();
             try
             {
                 var session = await SupabaseClient.Auth.SignUp(UserSignUp.Email, UserSignUp.Password);
                 if (session.User != null)
                 {
-                    sentEmail = $"User created successfully: {session.User.Email}";
-                    Console.WriteLine($"User created successfully {session.User.Email}");
                     ClearTextFields();
                     await Task.Delay(3000);
                     Navigation.NavigateTo("/login");
                 }
-                else
-                {
-                    errorMessage = "Error, try again.";
-                }
+
             }
             catch (Exception ex)
             {
-                errorMessage = $"Creation failed: {ex.Message}";
-                Console.Error.WriteLine($"Create error: {ex}");
-            }
-            finally
-            {
-                isLoading = false;
+
+                Console.Error.WriteLine($"Error: {ex}");
             }
         }
         else
@@ -106,9 +89,7 @@
         }
     }
 
-    bool isShow;
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
 
     void ButtonTestclick()
     {
@@ -125,8 +106,6 @@
             PasswordInput = InputType.Text;
         }
     }
-
-    private bool _processing = false;
 
     async Task ProcessSomething()
     {
