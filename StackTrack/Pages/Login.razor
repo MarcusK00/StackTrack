@@ -4,9 +4,10 @@
 @inject Supabase.Client SupabaseClient
 
 <PageTitle>Login</PageTitle>
-
-<div class="login-container">
-    <h3>Login to StackTrack</h3>
+<div class="login-wrapper">
+    <MudImage Class="logo-image" ObjectFit="ObjectFit.Contain" Width="400" Height="400" Src="images/logo.png" Alt="logo" Elevation="0" />
+    <div class="login-container">
+       
 
     @if (!string.IsNullOrEmpty(errorMessage))
     {
@@ -15,35 +16,35 @@
         </div>
     }
 
-    <EditForm Model="@UserLogin" OnValidSubmit="HandleLogin">
+    <EditForm Model="@UserLogin">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <div class="form-group">
-            <label>Email</label>
-            <InputText class="form-control" @bind-Value="UserLogin.Email" />
-            <ValidationMessage For="@(() => UserLogin.Email)" />
-        </div>
+        <MudPaper Class="align-content-start flex-wrap" Elevation="0">
 
-        <div class="form-group">
-            <label>Password</label>
-            <InputText class="form-control" @bind-Value="UserLogin.Password" type="password" />
+            <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Email" Variant="Variant.Filled" Label="Email" />
+            <ValidationMessage For="@(() => UserLogin.Email)" />
+
+                <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
             <ValidationMessage For="@(() => UserLogin.Password)" />
-        </div>
-        <div >
-        <button type="submit" class="btn btn-primary" disabled="@isLoading">
-            @if (isLoading)
-            {
-                <span>Logging in...</span>
-            }
-            else
-            {
-                <span>Login</span>
-            }
-        </button>
-        <button type="button" class="btn btn-secondary" onclick="@RedirectToSignUp">Sign Up</button>
-        </div>
+ 
+        <MudPaper Class="d-flex flex-grow-1 gap-1 py-2" Elevation="0">
+            <MudButton Class="py-3 d-inline-flex flex-1"  Disabled="@_processing" OnClick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText>Login</MudText>
+                }
+            </MudButton>
+            <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToSignUp" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Sign Up</MudText></MudButton>
+        </MudPaper>
+        </MudPaper>
     </EditForm>
+</div>
 </div>
 
 @code
@@ -56,8 +57,16 @@
     {
         Navigation.NavigateTo("/signup");
     }
+
+    ObjectFit ImageFit = ObjectFit.Cover;
+
+    void SetImageFit(ObjectFit value)
+    {
+        ImageFit = value;
+    }
     private async Task HandleLogin()
     {
+        ProcessSomething();
         isLoading = true;
         errorMessage = string.Empty;
 
@@ -83,5 +92,34 @@
         {
             isLoading = false;
         }
+    }
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ButtonTestclick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private bool _processing = false;
+
+    async Task ProcessSomething()
+    {
+        _processing = true;
+        await Task.Delay(2000);
+        _processing = false;
     }
 }
