@@ -3,6 +3,8 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "+": null,
+      "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
@@ -13,6 +15,8 @@
     },
     "https": {
       "commandName": "Project",
+      "+": null,
+      "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
