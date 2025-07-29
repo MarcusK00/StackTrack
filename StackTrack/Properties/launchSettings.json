@@ -3,22 +3,30 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "+": null,
+      "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "http://localhost:5097",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Supabase__Url": "https://xrpfkqjdtwbslcrnztbd.supabase.co",
+        "Supabase__Key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhycGZrcWpkdHdic2xjcm56dGJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MDAxOTgsImV4cCI6MjA2OTI3NjE5OH0.3johaDis8LMEgYwQb_SfaS0VEhSGTeiK41X9Nilqd54"
       }
     },
     "https": {
       "commandName": "Project",
+      "+": null,
+      "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "https://localhost:7086;http://localhost:5097",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Supabase__Url": "https://xrpfkqjdtwbslcrnztbd.supabase.co",
+        "Supabase__Key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhycGZrcWpkdHdic2xjcm56dGJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MDAxOTgsImV4cCI6MjA2OTI3NjE5OH0.3johaDis8LMEgYwQb_SfaS0VEhSGTeiK41X9Nilqd54"
       }
     }
   }
