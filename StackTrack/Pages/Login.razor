@@ -48,7 +48,7 @@
 
 @code
 {
-    private LoginModel loginModel = new LoginModel();
+    private User UserLogin = new User();
     private string errorMessage = string.Empty;
     private bool isLoading = false;
 
@@ -63,7 +63,7 @@
 
         try
         {
-            var session = await SupabaseClient.Auth.SignIn(loginModel.Email, loginModel.Password);
+            var session = await SupabaseClient.Auth.SignIn(UserLogin.Email, UserLogin.Password);
             if (session.User != null)
             {
                 Console.WriteLine($"Login successful for user: {session.User.Email}");

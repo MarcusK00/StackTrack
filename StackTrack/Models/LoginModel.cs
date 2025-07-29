@@ -2,7 +2,7 @@
 
 namespace StackTrack.Models
 {
-    public class LoginModel
+    public class User
     {
         [Required, EmailAddress]
         public string Email { get; set; }
