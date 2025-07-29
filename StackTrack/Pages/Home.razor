@@ -1,0 +1,14 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div>
+    <h3>Email</h3>
+    <InputText @bind-Value="@_email"></InputText>
+    <h3>Password</h3>
+</div>
+
+@code
+{
+private string _email;
+}
