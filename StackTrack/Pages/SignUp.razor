@@ -75,7 +75,9 @@
             {
                 sentEmail = $"Email confirmation link has been sent to {session.User.Email}";
                 Console.WriteLine($"User created successfully {session.User.Email}");
-                Navigation.NavigateTo("/login");
+                UserSignUp.Email = string.Empty;
+                UserSignUp.Password = string.Empty;
+                return;
             }
             else
             {
