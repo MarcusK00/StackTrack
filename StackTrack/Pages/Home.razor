@@ -1,8 +1,139 @@
 ﻿@page "/home"
 
-<PageTitle>Login</PageTitle>
-<h3>Home</h3>
+@using MudBlazor
+@inject Supabase.Client SupabaseClient
+@inject NavigationManager Navigation
+
+<PageTitle>Home - StackTrack</PageTitle>
+
+<MudLayout>
+    <!-- AppBar with mobile menu toggle -->
+    <MudAppBar Color="Color.Primary" Elevation="4">
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" OnClick="ToggleDrawer" Edge="Edge.Start" />
+        </MudHidden>
+        <MudText Typo="Typo.h6">StackTrack</MudText>
+        <MudSpacer />
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="Logout">Logout</MudButton>
+        </MudHidden>
+    </MudAppBar>
+<!-- Responsive Drawer for mobile nav -->
+<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Never" Variant="DrawerVariant.Temporary" Elevation="1">
+    <MudNavMenu>
+        <MudNavLink Href="/home" Match="NavLinkMatch.All">Home</MudNavLink>
+        <MudNavLink Href="/workout/new">Start Workout</MudNavLink>
+        <MudNavLink Href="/history">View History</MudNavLink>
+        <MudNavLink Href="/exercises">Manage Exercises</MudNavLink>
+        <MudNavLink OnClick="Logout">Logout</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="mt-4">
+        <MudText Typo="Typo.h5" Align="Align.Center">Welcome Back!</MudText>
+    </MudContainer>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-2 px-2">
+        <MudGrid GutterSize="16px">
+            <!-- Summary Cards -->
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Total Workouts</MudText>
+                        <MudText Typo="Typo.h5">@totalWorkouts</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Current Streak</MudText>
+                        <MudText Typo="Typo.h5">@currentStreak days</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Next Workout</MudText>
+                        <MudText Typo="Typo.body2">@nextWorkoutDate.ToString("MMM dd, yyyy")</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Personal Records</MudText>
+                        <MudText Typo="Typo.h5">@personalRecords</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <!-- Chart -->
+            <MudItem xs="12" md="8">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Weight Progress</MudText>
+                        <MudChart ChartType="ChartType.Line" Labels="@(progressDates)" Values="@(new List<int[]> { progressWeights })" />
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <!-- Quick Actions -->
+            <MudItem xs="12" md="4">
+                <MudCard Class="mb-2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2" GutterBottom>Actions</MudText>
+                        <MudStack Spacing="1">
+                            <MudButton FullWidth Variant="Variant.Filled" Color="Color.Primary" OnClick="StartNewWorkout">Start Workout</MudButton>
+                            <MudButton FullWidth Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ViewHistory">History</MudButton>
+                            <MudButton FullWidth Variant="Variant.Text" Color="Color.Tertiary" OnClick="ManageExercises">Exercises</MudButton>
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</MudMainContent>
+</MudLayout>
 
 @code {
+private bool _drawerOpen;
+// Summary fields
+private int totalWorkouts;
+private int currentStreak;
+private DateTime nextWorkoutDate;
+private int personalRecords;
+
+// Chart data
+private string[] progressDates = new string[0];
+private int[] progressWeights = new int[0];
+
+protected override async Task OnInitializedAsync()
+{
+    // TODO: Load data from Supabase
+    totalWorkouts = 24;
+    currentStreak = 5;
+    nextWorkoutDate = DateTime.Today.AddDays(1);
+    personalRecords = 12;
+
+    progressDates = new[] { "Jul 20", "Jul 22", "Jul 24", "Jul 26", "Jul 28" };
+    progressWeights = new[] { 100, 105, 110, 115, 120 };
+}
+
+void ToggleDrawer()
+{
+    _drawerOpen = !_drawerOpen;
+}
+
+void StartNewWorkout() => Navigation.NavigateTo("/workout/new");
+void ViewHistory() => Navigation.NavigateTo("/history");
+void ManageExercises() => Navigation.NavigateTo("/exercises");
+
+async Task Logout()
+{
+    await SupabaseClient.Auth.SignOut();
+    Navigation.NavigateTo("/login", true);
+}
 
 }
