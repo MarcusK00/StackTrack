@@ -5,46 +5,83 @@
 
 <PageTitle>Login</PageTitle>
 
-<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="login-container">
+    <h3>Login to StackTrack</h3>
 
-    <div>
-        <label>Email</label>
-        <InputText @bind-Value="loginModel.Email" />
-    </div>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
 
-    <div>
-        <label>Password</label>
-        <InputText @bind-Value="loginModel.Password" type="password" />
-    </div>
+    <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <button type="submit">Login</button>
-</EditForm>
+        <div class="form-group">
+            <label>Email</label>
+            <InputText class="form-control" @bind-Value="loginModel.Email" />
+            <ValidationMessage For="@(() => loginModel.Email)" />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <InputText class="form-control" @bind-Value="loginModel.Password" type="password" />
+            <ValidationMessage For="@(() => loginModel.Password)" />
+        </div>
+        <div >
+        <button type="submit" class="btn btn-primary" disabled="@isLoading">
+            @if (isLoading)
+            {
+                <span>Logging in...</span>
+            }
+            else
+            {
+                <span>Login</span>
+            }
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="@RedirectToSignUp">Sign Up</button>
+        </div>
+    </EditForm>
+</div>
 
 @code
 {
     private LoginModel loginModel = new LoginModel();
-    private SupabaseLoginResponse supabaseLoginResponse = new SupabaseLoginResponse();
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
 
+    private void RedirectToSignUp()
+    {
+        Navigation.NavigateTo("/signup");
+    }
     private async Task HandleLogin()
     {
+        isLoading = true;
+        errorMessage = string.Empty;
+
         try
         {
-            var session = await SupabaseClient.Auth.SignIn(loginModel.Email,loginModel.Password);
-            if(session.User != null)
+            var session = await SupabaseClient.Auth.SignIn(loginModel.Email, loginModel.Password);
+            if (session.User != null)
             {
-                supabaseLoginResponse.access_token = session.AccessToken;
-                supabaseLoginResponse.refresh_token = session.RefreshToken;
-                supabaseLoginResponse.token_type = session.TokenType;
-                supabaseLoginResponse.expires_in = session.ExpiresIn;
-                Console.WriteLine($"Token: {session.AccessToken}");
+                Console.WriteLine($"Login successful for user: {session.User.Email}");
                 Navigation.NavigateTo("/home");
             }
+            else
+            {
+                errorMessage = "Authentication failed. Please check your credentials.";
+            }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            Console.Error.WriteLine($"Login failed: {ex.Message}");
+            errorMessage = $"Login failed: {ex.Message}";
+            Console.Error.WriteLine($"Login error: {ex}");
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 }
