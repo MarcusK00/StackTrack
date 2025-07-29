@@ -1,0 +1,41 @@
+﻿@page "/login"
+@namespace StackTrack.Models
+@inject NavigationManager Navigation
+@inject Supabase.Client SupabaseClient
+
+<PageTitle>Login</PageTitle>
+
+<div>
+    <h3>Email</h3>
+    <InputText @bind-Value="@loginModel.Email"/>
+    <h3>Password</h3>
+    <InputText @bind-Value="@loginModel.Password" type="password"/>
+    <button type="submit">Login</button>
+</div>
+
+@code
+{
+    private LoginModel loginModel = new LoginModel();
+    private SupabaseLoginResponse supabaseLoginResponse = new SupabaseLoginResponse();
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            var session = await SupabaseClient.Auth.SignIn(loginModel.Email,loginModel.Password);
+            if(session.User != null)
+            {
+                supabaseLoginResponse.access_token = session.AccessToken;
+                supabaseLoginResponse.refresh_token = session.RefreshToken;
+                supabaseLoginResponse.token_type = session.TokenType;
+                supabaseLoginResponse.expires_in = session.ExpiresIn;
+                Console.WriteLine($"Token: {session.AccessToken}");
+                Navigation.NavigateTo("/home");
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.Error.WriteLine($"Login failed: {ex.Message}");
+        }
+    }
+}
