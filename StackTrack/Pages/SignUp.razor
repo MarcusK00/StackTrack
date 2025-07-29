@@ -6,7 +6,7 @@
 <PageTitle>Sign Up</PageTitle>
 
 <div class="login-container">
-    <h3>Login to StackTrack</h3>
+    <h3>Sign Up to StackTrack</h3>
 
     @if (!string.IsNullOrEmpty(errorMessage))
     {
@@ -14,21 +14,27 @@
             @errorMessage
         </div>
     }
+    else if(!string.IsNullOrEmpty(sentEmail))
+    {
+    <div class="email-confirmation">
+        @sentEmail
+    </div>
+    }
 
-    <EditForm Model="@loginModel" OnValidSubmit="HandleSignUp">
+    <EditForm Model="@UserSignUp" OnValidSubmit="HandleSignUp">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="form-group">
             <label>Email</label>
-            <InputText class="form-control" @bind-Value="loginModel.Email" />
-            <ValidationMessage For="@(() => loginModel.Email)" />
+            <InputText class="form-control" @bind-Value="UserSignUp.Email" />
+            <ValidationMessage For="@(() => UserSignUp.Email)" />
         </div>
 
         <div class="form-group">
             <label>Password</label>
-            <InputText class="form-control" @bind-Value="loginModel.Password" type="password" />
-            <ValidationMessage For="@(() => loginModel.Password)" />
+            <InputText class="form-control" @bind-Value="UserSignUp.Password" type="password" />
+            <ValidationMessage For="@(() => UserSignUp.Password)" />
         </div>
         <div>
             <button type="submit" class="btn btn-primary" disabled="@isLoading">
@@ -48,8 +54,9 @@
 
 @code
 {
-    private User SignUpUser = new User();
+    private User UserSignUp = new User();
     private string errorMessage = string.Empty;
+    private string sentEmail = string.Empty;
     private bool isLoading = false;
 
     private void RedirectToLogin()
@@ -63,9 +70,10 @@
 
         try
         {
-            var session = await SupabaseClient.Auth.SignUp(SignUpUser.Email, SignUpUser.Password);
+            var session = await SupabaseClient.Auth.SignUp(UserSignUp.Email, UserSignUp.Password);
             if (session.User != null)
             {
+                sentEmail = $"Email confirmation link has been sent to {session.User.Email}";
                 Console.WriteLine($"User created successfully {session.User.Email}");
                 Navigation.NavigateTo("/login");
             }
