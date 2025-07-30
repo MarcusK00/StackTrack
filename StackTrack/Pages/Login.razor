@@ -5,7 +5,7 @@
 
 <PageTitle>Login</PageTitle>
 <div class="login-wrapper">
-    <MudImage Class="logo-image" ObjectFit="ObjectFit.Contain" Width="400" Height="400" Src="images/logo.png" Alt="logo" Elevation="0" />
+    <MudImage Class="logo-image" ObjectFit="ObjectFit.Contain" Width="250" Height="250" Src="images/logo2.png" Alt="logo" Elevation="0" />
     <div class="login-container">
        
 
@@ -21,9 +21,9 @@
             <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Password" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
             <ValidationMessage For="@(() => UserLogin.Password)" />
  
-        <MudPaper Class="d-flex flex-grow-1 gap-1 " Elevation="0">
-                    <MudButton Class="py-3 d-inline-flex flex-1" OnClick="RedirectToSignUp" Variant="Variant.Filled" Color="Color.Secondary"><MudText>Sign Up</MudText></MudButton>
-            <MudButton Class="py-3 d-inline-flex flex-1"  Disabled="@_processing" OnClick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
+        <MudPaper Class="d-flex flex-grow-1 gap-1 mt-1" Elevation="0">
+
+            <MudButton Class="py-3 d-flex flex-1"  Disabled="@_processing" OnClick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
                 @if (_processing)
                 {
                     <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
@@ -31,11 +31,15 @@
                 }
                 else
                 {
-                    <MudText>Login</MudText>
+                    <MudText>Sign In</MudText>
                 }
             </MudButton>
-
         </MudPaper>
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="2">
+            <MudText Class="py-3 d-inline-flex mud-transparent ">Don't have an account?</MudText>
+            <MudButton Class="d-inline-flex " Variant="Variant.Text" OnClick="RedirectToSignUp" Color="Color.Primary">Sign Up</MudButton>
+            </MudStack>
+   
     </EditForm>
 </div>
 </div>
