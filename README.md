@@ -10,15 +10,15 @@
 <div>
  <h2/>
 <h3>Login Page</h3>
-<img width="1900" height="900" alt="Login" src="https://github.com/user-attachments/assets/1f0bdf96-33c2-4e2e-8366-653b50b2719a" />
+<img width="1918" height="1078" alt="Login" src="https://github.com/user-attachments/assets/eae665e1-2b70-4adc-a1e2-56598cbc6fd0" />
 <h2/>
 <h3>Sign Up Page</h3>
-<img width="1900" height="900" alt="SignUp" src="https://github.com/user-attachments/assets/a5dc5732-f453-4781-b7be-e1e94f431a86" />
+<img width="1918" height="1078" alt="SIGNUP" src="https://github.com/user-attachments/assets/ceed3382-9a03-43e0-aada-dacad88712cc" />
 <h2/>
 <h3>Home Page</h3>
-<img width="1900" height="900" alt="Home" src="https://github.com/user-attachments/assets/d7e50083-192a-41c9-a040-24ca60f84933" />
+<img width="1918" height="1078" alt="HOME" src="https://github.com/user-attachments/assets/0e5567a3-af6a-47e2-a6ad-2b1c507b928c" />
 <h2/>
 <h3>Home Page On Mobile</h3>
-<img width="1900" height="900" alt="home2" src="https://github.com/user-attachments/assets/f63bc28f-89a3-4f82-be60-22f8ee8ffc22" />
+<img width="667" height="898" alt="MobileView" src="https://github.com/user-attachments/assets/aa0ca5c5-da5d-4fa8-9c0f-bcc315e679a4" />
 
 </div>
