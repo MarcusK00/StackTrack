@@ -1,0 +1,36 @@
+﻿@using StackTrack.Models
+@inject SupabaseLoginResponse UserSession
+@inject Supabase.Client SupabaseClient
+@inject IJSRuntime JS
+
+<MudAppBar Elevation="4" Color="Color.Secondary" Fixed="true" Dense="true" Class="app-bar-custom">
+    <div class="d-flex align-center" style="width: 100%">
+        <!-- Logo Section -->
+        <div class="d-flex align-center brand-section">
+            <MudText Typo="Typo.h5" Color="Color.Inherit" Class="ml-1 font-weight-bold">
+                Stack<span style="color: var(--mud-palette-primary); font-weight: 700;">Track</span>
+            </MudText>
+        </div>
+        <MudSpacer />
+    </div>
+</MudAppBar>
+
+
+<style>
+    .app-bar-custom {
+        background: linear-gradient(to right, var(--mud-palette-secondary-darken), var(--mud-palette-secondary));
+        border-bottom: 2px solid var(--mud-palette-primary-lighten);
+    }
+
+    .brand-section {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .app-logo {
+        filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+    }
+</style>
+
+@code {
+   
+}
