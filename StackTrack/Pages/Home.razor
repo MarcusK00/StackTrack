@@ -369,24 +369,24 @@
 
     private async Task LoadUserData()
     {
-        try
-        {
-            // TODO: Load actual user data from Supabase
-            // This would include:
-            // 1. User profile info
-            // 2. Workout history
-            // 3. PR data
-            // 4. Progress metrics
+        // try
+        // {
+        //     // TODO: Load actual user data from Supabase
+        //     // This would include:
+        //     // 1. User profile info
+        //     // 2. Workout history
+        //     // 3. PR data
+        //     // 4. Progress metrics
 
-            // For now using dummy data
-            // In a real implementation, you'd query Supabase like:
-            // var response = await SupabaseClient.From<Workout>().Select("*").Order("created_at", Postgrest.Constants.Ordering.Descending).Limit(10).Get();
-            // var workouts = response.Models;
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add("Failed to load data: " + ex.Message, Severity.Error);
-        }
+        //     // For now using dummy data
+        //     // In a real implementation, you'd query Supabase like:
+        //     // var response = await SupabaseClient.From<Workout>().Select("*").Order("created_at", Postgrest.Constants.Ordering.Descending).Limit(10).Get();
+        //     // var workouts = response.Models;
+        // }
+        // catch (Exception ex)
+        // {
+        //     Snackbar.Add("Failed to load data: " + ex.Message, Severity.Error);
+        // }
     }
 
 
