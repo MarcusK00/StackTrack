@@ -1,6 +1,7 @@
 ﻿@using StackTrack.Models
 @inject SupabaseLoginResponse UserSession
 @inject Supabase.Client SupabaseClient
+@inject IJSRuntime JS
 
 <MudAppBar Elevation="4" Color="Color.Secondary" Fixed="true" Dense="true" Class="app-bar-custom">
     <div class="d-flex align-center" style="width: 100%">
@@ -113,11 +114,24 @@
     private bool _drawerOpen = false;
     private string? currentUserName = "";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // 1) Try your .NET session first
         if (UserSession?.CurrentUser?.Email is not null)
         {
             currentUserName = TrimEmailDomain(UserSession.CurrentUser.Email);
+            return;
+        }
+
+        // 2) Fallback to JS‑interop
+        try
+        {
+            var email = await JS.InvokeAsync<string>("getUserEmail");
+            currentUserName = TrimEmailDomain(email);
+        }
+        catch
+        {
+            currentUserName = null; // not logged in or error
         }
     }
     private void ToggleDrawer()
@@ -138,14 +152,13 @@
             UserSession.CurrentSession = null;
             UserSession.CurrentUser = null;
             currentUserName = "";
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/", forceLoad:true);
         }
         catch(Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
-    
-
+   
     }
 
     private string TrimEmailDomain(string email)

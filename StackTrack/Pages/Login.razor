@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation
 @inject Supabase.Client SupabaseClient
 @inject SupabaseLoginResponse UserSession
+@inject IJSRuntime JS
 
 <PageTitle>Login</PageTitle>
 <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center" Class="login-grid">
@@ -39,7 +40,7 @@
             <MudText Class="py-3 d-inline-flex mud-transparent ">Don't have an account?</MudText>
             <MudButton Class="d-inline-flex " Variant="Variant.Text" OnClick="RedirectToSignUp" Color="Color.Primary">Sign Up</MudButton>
             </MudStack>
-   
+                    <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Primary" OnClick="OnGoogleLogin" aria-label="google" />
     </EditForm>
 </div>
 </div>
@@ -102,5 +103,11 @@
         _processing = true;
         await Task.Delay(2000);
         _processing = false;
+    }
+    private async Task OnGoogleLogin()
+    {
+        // this calls the `signInWithGoogle()` function you defined in index.html
+        await JS.InvokeVoidAsync("signInWithGoogle");
+        var user = await JS.InvokeAsync<User>("supabase.auth.getUser");
     }
 }
