@@ -19,6 +19,7 @@
 <img width="1918" height="1078" alt="HOME" src="https://github.com/user-attachments/assets/0e5567a3-af6a-47e2-a6ad-2b1c507b928c" />
 <h2/>
 <h3>Home Page On Mobile</h3>
-<img width="667" height="898" alt="MobileView" src="https://github.com/user-attachments/assets/aa0ca5c5-da5d-4fa8-9c0f-bcc315e679a4" />
-
+<p align="center">
+<img margin="auto" width="366" height="808" alt="Screenshot 2025-07-30 092534" src="https://github.com/user-attachments/assets/614c7d27-2ab3-4c62-a6c7-4ab457b6ea9a" />
+</p>
 </div>
