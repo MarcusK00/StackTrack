@@ -2,6 +2,7 @@
 @namespace StackTrack.Models
 @inject NavigationManager Navigation
 @inject Supabase.Client SupabaseClient
+@inject SupabaseLoginResponse UserSession
 
 <PageTitle>Login</PageTitle>
 <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center" Class="login-grid">
@@ -14,9 +15,6 @@
     <EditForm Model="@UserLogin">
         <DataAnnotationsValidator />
         <ValidationSummary />
-
-
-
             <MudTextField Class="d-flex py-2" @bind-Value="UserLogin.Email" Variant="Variant.Filled" Label="Email" />
             <ValidationMessage For="@(() => UserLogin.Email)" />
 
@@ -50,30 +48,26 @@
 
 @code
 {
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     private User UserLogin = new User();
 
     private void RedirectToSignUp()
     {
         Navigation.NavigateTo("/signup");
     }
-
-    ObjectFit ImageFit = ObjectFit.Cover;
-
-    void SetImageFit(ObjectFit value)
-    {
-        ImageFit = value;
-    }
     private async Task HandleLogin()
     {
         await ProcessSomething();
-
-
         try
         {
             var session = await SupabaseClient.Auth.SignIn(UserLogin.Email, UserLogin.Password);
             if (session.User != null)
             {
-                Console.WriteLine($"Login successful for user: {session.User.Email}");
+                UserSession.CurrentUser = SupabaseClient.Auth.CurrentUser;
+                UserSession.CurrentSession = SupabaseClient.Auth.CurrentSession;
                 Navigation.NavigateTo("/home");
             }
 
@@ -84,10 +78,6 @@
             Console.Error.WriteLine($"Login error: {ex}");
         }
     }
-
-    bool isShow;
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     void ButtonTestclick()
     {

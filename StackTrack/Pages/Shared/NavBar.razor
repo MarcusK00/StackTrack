@@ -1,4 +1,8 @@
-﻿<MudAppBar Elevation="4" Color="Color.Secondary" Fixed="true" Dense="true" Class="app-bar-custom">
+﻿@using StackTrack.Models
+@inject SupabaseLoginResponse UserSession
+@inject Supabase.Client SupabaseClient
+
+<MudAppBar Elevation="4" Color="Color.Secondary" Fixed="true" Dense="true" Class="app-bar-custom">
     <div class="d-flex align-center" style="width: 100%">
         <!-- Mobile Menu Button -->
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
@@ -49,7 +53,7 @@
 
             <MudHidden Breakpoint="Breakpoint.SmAndDown">
                 <MudText Typo="Typo.body1" Class="ml-2">
-                    MarcusK00
+                    @currentUserName
                 </MudText>
             </MudHidden>
 
@@ -105,10 +109,17 @@
 </style>
 
 @code {
-    private bool _drawerOpen = false;
-
     [Inject] NavigationManager Navigation { get; set; }
+    private bool _drawerOpen = false;
+    private string? currentUserName = "";
 
+    protected override void OnInitialized()
+    {
+        if (UserSession?.CurrentUser?.Email is not null)
+        {
+            currentUserName = TrimEmailDomain(UserSession.CurrentUser.Email);
+        }
+    }
     private void ToggleDrawer()
     {
         _drawerOpen = !_drawerOpen;
@@ -119,8 +130,29 @@
         Navigation.NavigateTo("/workout/new");
     }
 
-    private void Logout()
+    private async Task Logout()
     {
-        // your logout logic
+        try
+        {
+            await SupabaseClient.Auth.SignOut();
+            UserSession.CurrentSession = null;
+            UserSession.CurrentUser = null;
+            currentUserName = "";
+            Navigation.NavigateTo("/login");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    
+
+    }
+
+    private string TrimEmailDomain(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return "";
+
+        var parts = email.Split('@');
+        return parts.Length > 0 ? parts[0].Trim() : "";
     }
 }
