@@ -8,9 +8,10 @@
   </picture>
 </h3>
 <div>
+
  <h2/>
 <h3>Login Page</h3>
-<img width="1918" height="1078" alt="Login" src="https://github.com/user-attachments/assets/eae665e1-2b70-4adc-a1e2-56598cbc6fd0" />
+<img width="1918" height="1078" alt="Login" src="https://github.com/user-attachments/assets/938dfb07-e752-405a-ae80-4d90f4fb5749" />
 <h2/>
 <h3>Sign Up Page</h3>
 <img width="1918" height="1078" alt="SIGNUP" src="https://github.com/user-attachments/assets/ceed3382-9a03-43e0-aada-dacad88712cc" />
