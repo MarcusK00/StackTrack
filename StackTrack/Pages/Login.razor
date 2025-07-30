@@ -44,7 +44,16 @@
             <MudText Class="py-3 d-inline-flex mud-transparent ">Don't have an account?</MudText>
             <MudButton Class="d-inline-flex " Variant="Variant.Text" OnClick="RedirectToSignUp" Color="Color.Primary">Sign Up</MudButton>
             </MudStack>
-                    <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Primary" OnClick="OnGoogleLogin" aria-label="google" />
+                    <div class="divider-with-text">
+                        <span>Or connect with</span>
+                    </div>
+
+                    <!-- Centered Google button below -->
+                    <MudStack AlignItems="AlignItems.Center" Spacing="0">
+                        <MudIconButton Icon="@Icons.Custom.Brands.Google"
+                                       Color="Color.Secondary"
+                                       OnClick="OnGoogleLogin"/>
+                    </MudStack>
     </EditForm>
 </div>
 </div>

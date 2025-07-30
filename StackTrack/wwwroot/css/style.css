@@ -16,10 +16,47 @@
 }
 
 .logo-image {
-    margin-top: -350px;
+    margin-top: -400px;
     position: absolute;
     margin-left:15px;
 }
+
+.divider-with-text {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+    color: var(--mud-palette-text-secondary); /* optional: match your theme */
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+    .divider-with-text::before,
+    .divider-with-text::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: rgba(0,0,0,0.12);
+    }
+
+    .divider-with-text::before {
+        margin-right: 0.75rem;
+    }
+
+    .divider-with-text::after {
+        margin-left: 0.75rem;
+    }
+.google-icon-btn {
+    padding: 0.25rem !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: unset !important; /* override MudBlazor's default */
+    border-radius: 50%;
+}
+
+    /* optional: adjust hover BG tone */
+    .google-icon-btn:hover {
+        background-color: rgba(50, 57, 64, 0.1) !important;
+    }
 
 
 

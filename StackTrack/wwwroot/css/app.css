@@ -1,4 +1,4 @@
-.valid.modified:not([type=checkbox]) {
+﻿.valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
 
@@ -86,3 +86,81 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* Full‑screen gym loader */
+.gym-loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #323940, #1f262b);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #f1f1f1;
+    z-index: 9999;
+}
+
+/* Spinner container */
+.gym-spinner {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+}
+
+/* Outer ring */
+.spinner-ring {
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0;
+    border: 8px solid rgba(255,255,255,0.2);
+    border-top-color: #323940;
+    border-radius: 50%;
+    animation: spin 2.5s linear infinite;
+}
+
+/* Dumbbell bar */
+.barbell .bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 8px;
+    background: #1f262b;
+    transform: translate(-50%, -50%);
+}
+
+/* Dumbbell weights */
+.barbell .weight {
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 32px;
+    background: #1f262b;
+}
+
+    .barbell .weight.left {
+        left: calc(50% - 44px);
+        transform: translateY(-50%);
+    }
+
+    .barbell .weight.right {
+        left: calc(50% + 44px - 16px);
+        transform: translateY(-50%);
+    }
+
+/* Loading text */
+.loading-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+}
+
+/* Slower spin */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+

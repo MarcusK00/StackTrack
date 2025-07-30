@@ -1,0 +1,25 @@
+﻿@* Shared/GymLoading.razor *@
+@using MudBlazor
+
+@if (Visible)
+{
+    <div class="gym-loading-screen">
+        <div class="gym-spinner">
+            <!-- Use the enum for the progress ring size -->
+            <MudProgressCircular Indeterminate="true"
+                                 Size="Size.Large"
+                                 Color="Color.Primary"
+                                 Thickness="8" />
+
+            <!-- Use a CSS rule to scale the icon, not the MudBlazor Size enum -->
+            <MudIcon Icon="@Icons.Material.Filled.FitnessCenter"
+                     Class="dumbbell-icon" />
+        </div>
+        <div class="loading-text">@Text</div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public string Text { get; set; } = "Fueling Gains...";
+}
