@@ -3,24 +3,26 @@
   "profiles": {
     "http": {
       "commandName": "Project",
-      "+": null,
       "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "http://localhost:5097",
+      // ← change this line:
+      "applicationUrl": "http://0.0.0.0:5097",
+      // localhost:5097"
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {
       "commandName": "Project",
-      "+": null,
       "launchUrl": "login",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:7086;http://localhost:5097",
+      // ← and change this one:
+      "applicationUrl": "https://0.0.0.0:7086;http://0.0.0.0:5097",
+      //     "applicationUrl": localhost:7086;localhost:5097"
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

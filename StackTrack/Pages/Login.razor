@@ -4,6 +4,8 @@
 @inject Supabase.Client SupabaseClient
 
 <PageTitle>Login</PageTitle>
+<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center" Class="login-grid">
+    <MudItem xs="12" sm="8" md="6" lg="4">
 <div class="login-wrapper">
     <MudImage Class="logo-image" ObjectFit="ObjectFit.Contain" Width="250" Height="250" Src="images/logo2.png" Alt="logo" Elevation="0" />
     <div class="login-container">
@@ -43,6 +45,8 @@
     </EditForm>
 </div>
 </div>
+    </MudItem>
+</MudGrid>
 
 @code
 {
