@@ -1,4 +1,8 @@
 ﻿@page "/login"
+@layout HiddenNavLayout
+@using MudBlazor
+@using System.Globalization
+@using StackTrack.Models
 @namespace StackTrack.Models
 @inject NavigationManager Navigation
 @inject Supabase.Client SupabaseClient
@@ -106,7 +110,7 @@
     }
     private async Task OnGoogleLogin()
     {
-        // this calls the `signInWithGoogle()` function you defined in index.html
+        // this calls the `signInWithGoogle()` function
         await JS.InvokeVoidAsync("signInWithGoogle");
         var user = await JS.InvokeAsync<User>("supabase.auth.getUser");
     }
